@@ -56,8 +56,6 @@ exports.addBook = (request, h) => {
 
     Books.push(newBooks);
 
-    console.log(newBooks)
-
     const isSuccess = Books.filter( (book) => book.id === id).length > 0;
 
     if(isSuccess){
@@ -79,5 +77,30 @@ exports.addBook = (request, h) => {
     });
     response.code(404);
 
+    return response;
+}
+
+exports.getBooks = (request, h) => {
+    
+    if(Books.length > 0){
+        const response = h.response({
+            status: 'success',
+            data: {
+                books: Books,
+            }
+        });
+
+        response.code(200);
+        return response;
+    }
+
+    const response = h.response({
+        status: 'success',
+        data: {
+            books: [],
+        }
+    });
+
+    response.code(200);
     return response;
 }
