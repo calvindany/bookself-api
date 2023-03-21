@@ -191,6 +191,34 @@ exports.updateBookById = (request, h) => {
         message: 'Gagal memperbarui buku. Id tidak ditemukan'
     });
     response.code(404);
-    
+
+    return response;
+}
+
+exports.deleteBookById = (request, h) => {
+    const { bookId } = request.params;
+
+    const book = Books.filter( (book) => book.id === bookId )[0];
+
+    if( book ) {
+        const index = Books.findIndex( (book) => book.id === bookId);
+
+        Books.splice(index, 1);
+
+        const response = h.response({
+            status: 'success',
+            message: 'Buku berhasil dihapus',
+        });
+        response.code(200);
+
+        return response;
+    }
+
+    const response = h.response({
+        status: 'fail',
+        message: 'Buku gagal dihapus. Id tidak ditemukan',
+    });
+    response.code(404);
+
     return response;
 }
