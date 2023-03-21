@@ -1,4 +1,4 @@
-const { addBook, getBooks } = require('./handler')
+const { addBook, getBooks, getBooksById } = require('./handler')
 
 const routes = [
     {
@@ -10,6 +10,11 @@ const routes = [
         method: 'GET',
         path: '/books',
         handler: getBooks,
+    },
+    {
+        method: 'GET',
+        path: '/books/{bookId}',
+        handler: getBooksById,
     }
 ]
 
