@@ -81,12 +81,81 @@ exports.addBook = (request, h) => {
 }
 
 exports.getBooks = (request, h) => {
+    //Get Query
+    const { reading, finished, name } = request.query;
     
-    if(Books.length > 0){
+    //Condition if there is a query in url request
+    if(reading == 1 || reading == 0){
+        let findBook;
+        if(reading == 1){
+            findBook = Books.filter( (book) => book.reading === true);
+        } else {
+            findBook = Books.filter( (book) => book.reading === false);
+        }
+        
+        const books = findBook.map( (book) => {
+            return { id: book.id, name : book.name, publisher: book.publisher};
+        })
+
         const response = h.response({
             status: 'success',
             data: {
-                books: Books,
+                books,
+            }
+        });
+
+        response.code(200);
+
+        return response;
+
+    } else if ( finished == 1 || finished == 0 ){
+        let findBook;
+        if(finished == 1){
+            findBook = Books.filter( (book) => book.finished === true);
+        } else {
+            findBook = Books.filter( (book) => book.finished === false);
+        }
+        
+        const books = findBook.map( (book) => {
+            return { id: book.id, name : book.name, publisher: book.publisher};
+        });
+
+        const response = h.response({
+            status: 'success',
+            data: {
+                books,
+            }
+        });
+        response.code(200);
+
+        return response;
+    } else if (name){
+        const findBook = Books.filter( (book) => book.name.toLowerCase().includes(name.toLowerCase()));
+
+        const books = findBook.map( (book) => {
+            return { id: book.id, name : book.name, publisher: book.publisher};
+        });
+
+        const response = h.response({
+            status: 'success',
+            data: {
+                books,
+            }
+        });
+        response.code(200);
+
+        return response;
+    }
+
+    //Will executed when there is no query params and Books array length filled at least 1 item 
+    if(Books.length > 0){
+        const books = Books.map( (book) => {
+            return { id: book.id, name : book.name, publisher: book.publisher};
+        })
+        const response = h.response({
+            status: 'success',
+            data: {
+                books,
             }
         });
 
@@ -94,6 +163,7 @@ exports.getBooks = (request, h) => {
         return response;
     }
 
+    //Will executed if there is no item in Books array
     const response = h.response({
         status: 'success',
         data: {
